@@ -1,4 +1,4 @@
-"use client"; // This line enables the component to use hooks
+"use client"; // Important for using hooks in Next.js
 
 import { useEffect, useState } from 'react';
 
@@ -7,9 +7,9 @@ export default function ProductGrid() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch('/api/product'); // Ensure this API route is correct
+      const response = await fetch('/api/products'); // Ensure this route is correct
       const data = await response.json();
-      console.log(data); // Check the fetched data structure
+      console.log(data); // Check the structure of the fetched data
       setProducts(data);
     };
 
@@ -22,9 +22,9 @@ export default function ProductGrid() {
         products.map((product) => (
           <div key={product.id} className="border p-4 rounded-lg shadow-lg">
             <img 
-            src="/image/images (6).jpg" 
-            alt="Clothing Store"
-            className="mt-5 w-1/2 h-auto rounded-lg shadow-lg" 
+              src={`/images/${product.image}`} // Use the correct path to the image
+              alt={product.title} 
+              className="h-40 w-full object-cover" 
             />
             <h2 className="text-lg font-bold mt-2">{product.title}</h2>
             <p className="text-xl font-semibold">Price: ${product.price}</p>
