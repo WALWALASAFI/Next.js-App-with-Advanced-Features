@@ -1,23 +1,47 @@
-import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-export default async function ProductsPage() {
-  const res = await fetch('https://api.example.com/products'); // Replace with your API
-  const products = await res.json();
+export default function ProductPage() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      const fetchProduct = async () => {
+        const productRes = await fetch(`https://fakestoreapi.com/products/${id}`);
+        if (!productRes.ok) {
+          // Handle error if the product is not found
+          setLoading(false);
+          return;
+        }
+        const productData = await productRes.json();
+        setProduct(productData);
+        setLoading(false);
+      };
+      fetchProduct();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!product) {
+    return <div>Product not found</div>;
+  }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Products</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.map((product) => (
-          <div key={product.id} className="border p-4 rounded-lg shadow">
-            <Link href={`/products/${product.id}`}>
-              <h2 className="text-xl font-semibold">{product.name}</h2>
-              <img src={product.imageUrl} alt={product.name} className="h-48 w-full object-cover mt-2" />
-              <p className="mt-2">Price: ${product.price}</p>
-            </Link>
-          </div>
-        ))}
-      </div>
+    <div className="mb-8 p-4">
+      <h1 className="text-3xl font-bold">{product.title}</h1>
+      <img src={product.image} alt={product.title} className="h-64 w-full object-cover mt-4" />
+      <p className="mt-2 text-gray-700">{product.description}</p>
+      <p className="text-xl font-semibold mt-2">Price: ${product.price}</p>
+      <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        Buy Now
+      </button>
+      <p className="text-md mt-2">{product.stock > 0 ? "In Stock" : "Out of Stock"}</p>
     </div>
   );
 }
