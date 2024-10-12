@@ -1,28 +1,22 @@
-"use client"; // Important for using hooks in Next.js
+"use client"; // This line is crucial for enabling hooks in Next.js
 
 import { useEffect, useState } from 'react';
+import { products } from './products'; // Adjust the path based on your structure
 
 export default function ProductGrid() {
-  const [products, setProducts] = useState([]);
+  const [productData, setProductData] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await fetch('/api/products'); // Ensure this route is correct
-      const data = await response.json();
-      console.log(data); // Check the structure of the fetched data
-      setProducts(data);
-    };
-
-    fetchProducts();
+    setProductData(products); // Set the hardcoded data
   }, []);
 
   return (
     <div>
-      {products.length > 0 ? (
-        products.map((product) => (
+      {productData.length > 0 ? (
+        productData.map((product) => (
           <div key={product.id} className="border p-4 rounded-lg shadow-lg">
             <img 
-              src={`/images/${product.image}`} // Use the correct path to the image
+              src={`/images/${product.image}`} // Ensure this matches your image path
               alt={product.title} 
               className="h-40 w-full object-cover" 
             />
@@ -32,7 +26,7 @@ export default function ProductGrid() {
           </div>
         ))
       ) : (
-        <p>No products available.</p>
+        <p> products available.</p>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ export const products = [
   {
     id: 1,
     title: "Product 1",
-    image: "image1.jpg",
+    image: "image1.jpg", // Ensure this matches your image file in /public/images
     price: 100,
   },
   {
